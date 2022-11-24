@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.desc|truncatewords:155}}
+    {% else %}
+        Welcome To My Cart.Where You Can Buy Different Products.
+    {% endif %}
+{% endblock %}
+
+
+{% block title %}
+    {% if category %}
+        {{category.name}}-MY CART
+    {% else %}
+        See Our New Collections -MY CART
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if category %}
+        <div>
+            <div class="my_row_class">
+                <div class="mx_auto">
+                    <p style="padding-top:15px;color:#FF5F15;font-size:38px;"><a href="{% url 'shop:allprocat' %}">Our Product Collection</a> </p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="mx_auto">
+        {% if category %}
+            <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" width="1250px;">
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center my_title">{{category.name}}</h1>
+        <p class="text-justify">{{category.desc}}</p>
+    </div>
+        {% else %}
+    <div>
+        <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="Our Products" width="1250px;">
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center my_title" style="padding-top:15px;color:#FF5F15;font-size:38px;">Our Product Collections</h1>
+        <p>Ecommerce, also known as electronic commerce or internet commerce, refers to the buying and selling of goods or services using the internet, and the transfer of money and data to execute these transactions. Ecommerce is often used to refer to the sale of physical products online, but it can also describe any kind of commercial transaction that is facilitated through the internet.</p>
+    </div>
+    {% endif %}
+    <div class="container">
+        <div class="row mx_auto">
+            {% for product in products.object_list %}
+            <div class="my_bottom_margin col-9 col-md-12 col-md-4 col-lg-4">
+                <div class="card text-center " style="min-width:18rem;height:95%;">
+                    <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="150px;"> </a>
+                <div class="card-body" >
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.price}}</p>
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %}active{% endif %}">{{pg}}</a>
+                {% endfor %}
+
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+
